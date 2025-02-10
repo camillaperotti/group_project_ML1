@@ -5,3 +5,6 @@ scikit-learn
 seaborn
 matplotlib
 plotly
+os
+scikit-learn
+
