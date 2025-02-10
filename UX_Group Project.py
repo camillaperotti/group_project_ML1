@@ -14,7 +14,7 @@ with col1:
         st.write("")
         st.title("Welcome to Boston!")
 with col2:
-        st.image("Boston_logo.png",width=210)
+        st.image("Boston-white.webp",width=210)
 
 
 
@@ -44,7 +44,7 @@ st.subheader("Criteria")
 
 def user_input():
         #Number of rooms (RM)
-        rooms = st.slider("**Number of rooms:**",min_value=1, max_value=10, value=1)
+        rooms = st.slider("**Number of rooms:**",min_value=1, max_value=20, value=1)
         st.write(f"You selected {rooms} number of rooms")
         st.write("---")
         #Per capita Crime rate (CRIM)
@@ -78,13 +78,53 @@ def user_input():
         st.write(f"The boston average ratio is 18.45, meaning 1 teacher for every 18.45 pupils. You selected a ratio of {ratio}")
         st.write("---")
 
+        #Residential Zone (ZN)
+        zn = st.slider("**Percentage of residential zones in your desired area**",min_value=0, max_value=100, value=1)
+        st.write(f"The higher the percentage is the lower is the house density and the more space you may expect in that area. You selected a percentage of {ratio}")
+        st.write("---")
+
+        #Near River (CHAS)
+        near_river = st.selectbox('**Do you wish your house to be closes to the Charles River?**',('Yes','No'))
+        st.write('Your selection is:', near_river)
+        st.write("---")
+        
+        #OlderHomes (AGE)
+        oldhomes = st.slider("**Percentage of older homes in your desired area**",min_value=0, max_value=100, value=1)
+        st.write(f"Old houses are houses built before 1940. You selected a ratio of {ratio}")
+        st.write("---")
+
+        #Distance to Employment Centers (DIS)
+        importance = st.slider("**How important is it to you that employment centers are close?**",min_value=0, max_value=10, value=0, step=1)
+        min_dis = 1   # Closest to employment centers
+        max_dis = 13  # Farthest from employment centers
+        mapped_dis = np.interp(importance, [0, 10], [max_dis, min_dis])
+        st.write(f"Higher importance means closer proximity to employment centers. Lower importance means houses can be further away. You selected an importance level of {importance}")
+        st.write("---")
+            
+        #BlackPopIndex (B)
+        importance_B = st.slider("**How important is it for you to live in an area with mixed ethnicity?**", 
+                         min_value=0, max_value=10, value=0, step=1)
+        min_B = 0   # Least diverse (low `B` value)
+        max_B = 400  # Most diverse (highest observed `B` value in dataset)
+        mapped_B = np.interp(importance_B, [0, 10], [min_B, max_B])
+        st.write(f"Higher importance means choosing an area with a more diverse population. Lower importance means living in a less diverse area. You selected an importance level of {importance_B}")
+        st.write("---")
+
+        #HighwayAccess (RAD)
+        
+
         data = {"rooms": rooms,
                 "crime_rate": crime_rate,
                 "pollution": pollution,
                 "lstat": lstat,
                 "tax_rate": tax_rate,
                 "indus": indus,
-                "pupil_teacher_ratio": ratio}
+                "pupil_teacher_ratio": ratio,
+                "Residential zone": zn,
+                "River Proximity": near_river,
+                "Older Homes": oldhomes,
+                "Distance to Employment Centers": importance,
+                "Mixed ethnicity areas":importance_B}
         features = pd.DataFrame(data, index=[0])
         return features
                 
